@@ -2,63 +2,214 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- PREVENT GOOGLE INDEXING -->
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <title>Internal App Hub</title>
+  
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      background-color: #f4f5f7;
+    /* ==================== GLOBAL STYLES & RESET ==================== */
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --card-hover: #334155;
+      --accent-color: #2563eb;
+      --accent-hover: #1d4ed8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
     }
-    
-    /* Access Denied / Hidden Screen */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden; /* Prevents any unwanted horizontal/vertical scrolling */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+    }
+
+    /* ==================== DENIED SCREEN ==================== */
     #deniedScreen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      color: #374151;
       text-align: center;
       padding: 20px;
     }
+    #deniedScreen h2 { font-size: 2rem; margin-bottom: 8px; color: var(--text-main); }
+    #deniedScreen p { color: var(--text-muted); font-size: 0.95rem; }
 
-    /* Main Hub Screen */
-    #hubScreen {
-      display: none; /* Hidden by default */
-      flex-direction: column;
+    /* ==================== MAIN WORKSPACE ==================== */
+    #workspace {
+      display: none; /* Shown via JS when access key matches */
+      width: 100vw;
       height: 100vh;
+      position: relative;
+      overflow: hidden;
     }
 
-    header {
-      background-color: #1f2937;
-      color: white;
-      padding: 12px 20px;
+    /* ==================== DASHBOARD VIEW ==================== */
+    #dashboardView {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 32px 20px;
+      overflow-y: auto;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header-section {
+      margin-bottom: 32px;
+    }
+    .header-section h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .header-section p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 6px;
+    }
+
+    /* App Grid Layout */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      width: 100%;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px 20px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-    }
-    nav { display: flex; gap: 10px; }
-    .tab-btn {
-      background-color: #374151;
-      color: #d1d5db;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
+      gap: 16px;
       cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
+      transition: all 0.2s ease-in-out;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    .tab-btn:hover { background-color: #4b5563; color: white; }
-    .tab-btn.active { background-color: #2563eb; color: white; }
-    .iframe-container { flex: 1; width: 100%; height: 100%; border: none; }
-    iframe { width: 100%; height: 100%; border: none; }
+
+    .app-card:hover, .app-card:active {
+      background: var(--card-hover);
+      transform: translateY(-2px);
+      border-color: var(--accent-color);
+    }
+
+    .app-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(37, 99, 235, 0.15);
+      color: #60a5fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .app-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .app-info {
+      flex: 1;
+      min-width: 0; /* Prevents text overflow */
+    }
+
+    .app-info h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .app-info p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ==================== ACTIVE APP IFRAME VIEW ==================== */
+    #appContainer {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #ffffff;
+      z-index: 10;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* ==================== SUPER FLOATING RETURN BUTTON (FAB) ==================== */
+    #returnFab {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 99;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 22px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    #returnFab:hover, #returnFab:active {
+      transform: scale(1.05);
+      background-color: var(--accent-hover);
+    }
+
+    #returnFab svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
   </style>
 </head>
 <body>
@@ -66,30 +217,75 @@
   <!-- 1. DENIED SCREEN (Shown when visiting without key) -->
   <div id="deniedScreen">
     <h2>404 - Page Not Found</h2>
-    <p style="margin-top: 10px; color: #6b7280;">The page you are looking for does not exist or has been moved.</p>
+    <p>The page you are looking for does not exist or has been moved.</p>
   </div>
 
-  <!-- 2. APP HUB SCREEN (Shown ONLY when correct ?access= key is in URL) -->
-  <div id="hubScreen">
-    <header>
-      <h2>Internal App Hub</h2>
-      <nav>
-        <button class="tab-btn active" onclick="switchApp('scoreboard', this)">Scoreboard</button>
-        <button class="tab-btn" onclick="switchApp('booking', this)">Booking</button>
-        <button class="tab-btn" onclick="switchApp('admin', this)">Admin Control</button>
-      </nav>
-    </header>
+  <!-- 2. MAIN APP WORKSPACE -->
+  <div id="workspace">
+    
+    <!-- Dashboard Card Screen -->
+    <div id="dashboardView">
+      <div class="header-section">
+        <h1>Internal App Hub</h1>
+        <p>Select an application to launch</p>
+      </div>
 
-    <div class="iframe-container">
+      <div class="app-grid">
+        
+        <!-- Scoreboard Card -->
+        <div class="app-card" onclick="launchApp('scoreboard')">
+          <div class="app-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          </div>
+          <div class="app-info">
+            <h3>Scoreboard</h3>
+            <p>Track metrics & performance</p>
+          </div>
+        </div>
+
+        <!-- Booking Card -->
+        <div class="app-card" onclick="launchApp('booking')">
+          <div class="app-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="app-info">
+            <h3>Booking</h3>
+            <p>Schedules & reservations</p>
+          </div>
+        </div>
+
+        <!-- Admin Control Card -->
+        <div class="app-card" onclick="launchApp('admin')">
+          <div class="app-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <div class="app-info">
+            <h3>Admin Control</h3>
+            <p>Settings & administration</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Active iFrame Container -->
+    <div id="appContainer">
       <iframe id="appFrame" src="" title="App Content"></iframe>
     </div>
+
+    <!-- Super Floating Return Button -->
+    <button id="returnFab" onclick="closeApp()">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span>Hub Page</span>
+    </button>
+
   </div>
 
   <script>
     // ==========================================
     // CONFIGURATION
     // ==========================================
-    const SECRET_KEY = "NGA2026"; // CHANGE THIS to your custom key!
+    const SECRET_KEY = "NGA2026"; // Change if you want a different secret key
 
     const APPS = {
       scoreboard: "https://script.google.com/macros/s/AKfycbw_JhNBQMJNJLtFdSk0d26IHkKQmz3sZdIANeiGrpmORQrPPUxKup1pg1gz3DBJ5t6f/exec",
@@ -103,21 +299,28 @@
       const userKey = urlParams.get('access');
 
       if (userKey === SECRET_KEY) {
-        // Correct key: Show App Hub & Hide Denied Screen
         document.getElementById('deniedScreen').style.display = 'none';
-        document.getElementById('hubScreen').style.display = 'flex';
-        
-        // Load default app
-        switchApp('scoreboard', document.querySelector('.tab-btn.active'));
+        document.getElementById('workspace').style.display = 'block';
       }
-      // If key is wrong/missing, page stays on "404 - Page Not Found"
     };
 
-    function switchApp(appName, btnElement) {
-      document.getElementById('appFrame').src = APPS[appName];
-      const buttons = document.querySelectorAll('.tab-btn');
-      buttons.forEach(btn => btn.classList.remove('active'));
-      btnElement.classList.add('active');
+    // Launch Web App inside iFrame
+    function launchApp(appName) {
+      const frame = document.getElementById('appFrame');
+      
+      // Load iframe source only if different
+      if (frame.src !== APPS[appName]) {
+        frame.src = APPS[appName];
+      }
+
+      document.getElementById('appContainer').style.display = 'block';
+      document.getElementById('returnFab').style.display = 'flex';
+    }
+
+    // Return to Hub Dashboard
+    function closeApp() {
+      document.getElementById('appContainer').style.display = 'none';
+      document.getElementById('returnFab').style.display = 'none';
     }
   </script>
 

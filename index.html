@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- PREVENT GOOGLE INDEXING -->
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <title>Internal App Hub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #f4f5f7;
+    }
+    
+    /* Access Denied / Hidden Screen */
+    #deniedScreen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #374151;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Main Hub Screen */
+    #hubScreen {
+      display: none; /* Hidden by default */
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background-color: #1f2937;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav { display: flex; gap: 10px; }
+    .tab-btn {
+      background-color: #374151;
+      color: #d1d5db;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { background-color: #4b5563; color: white; }
+    .tab-btn.active { background-color: #2563eb; color: white; }
+    .iframe-container { flex: 1; width: 100%; height: 100%; border: none; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+
+  <!-- 1. DENIED SCREEN (Shown when visiting without key) -->
+  <div id="deniedScreen">
+    <h2>404 - Page Not Found</h2>
+    <p style="margin-top: 10px; color: #6b7280;">The page you are looking for does not exist or has been moved.</p>
+  </div>
+
+  <!-- 2. APP HUB SCREEN (Shown ONLY when correct ?access= key is in URL) -->
+  <div id="hubScreen">
+    <header>
+      <h2>Internal App Hub</h2>
+      <nav>
+        <button class="tab-btn active" onclick="switchApp('scoreboard', this)">Scoreboard</button>
+        <button class="tab-btn" onclick="switchApp('booking', this)">Booking</button>
+        <button class="tab-btn" onclick="switchApp('admin', this)">Admin Control</button>
+      </nav>
+    </header>
+
+    <div class="iframe-container">
+      <iframe id="appFrame" src="" title="App Content"></iframe>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // CONFIGURATION
+    // ==========================================
+    const SECRET_KEY = "NGA2026"; // CHANGE THIS to your custom key!
+
+    const APPS = {
+      scoreboard: "https://script.google.com/macros/s/AKfycbw_JhNBQMJNJLtFdSk0d26IHkKQmz3sZdIANeiGrpmORQrPPUxKup1pg1gz3DBJ5t6f/exec",
+      booking: "https://script.google.com/macros/s/AKfycbwAiFXnLCjdD8VDdQKzQpxU1hxqK4s7FavyC_f9LRSMmV3Q7g3DLIp7MDJZDBnrh6wD/exec",
+      admin: "https://script.google.com/macros/s/AKfycbz5uayzvcPfXG3rLzDLTdez4BN0ByYzlCVKUe2aH7r4PJKN4Woq2OH2dfld_PK7AV1mNA/exec"
+    };
+
+    // Check URL parameters on page load
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const userKey = urlParams.get('access');
+
+      if (userKey === SECRET_KEY) {
+        // Correct key: Show App Hub & Hide Denied Screen
+        document.getElementById('deniedScreen').style.display = 'none';
+        document.getElementById('hubScreen').style.display = 'flex';
+        
+        // Load default app
+        switchApp('scoreboard', document.querySelector('.tab-btn.active'));
+      }
+      // If key is wrong/missing, page stays on "404 - Page Not Found"
+    };
+
+    function switchApp(appName, btnElement) {
+      document.getElementById('appFrame').src = APPS[appName];
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

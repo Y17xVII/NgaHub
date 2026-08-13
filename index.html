@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- PREVENT GOOGLE INDEXING -->
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-  <title>Internal App Hub</title>
+  <title>NGA App Hub</title>
   
   <style>
     /* ==================== GLOBAL STYLES & RESET ==================== */
@@ -174,36 +174,38 @@
       display: block;
     }
 
-    /* ==================== SUPER FLOATING RETURN BUTTON (FAB) ==================== */
+    /* ==================== SMALL FLOATING RETURN BUTTON (BOTTOM LEFT) ==================== */
     #returnFab {
       display: none;
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 16px;
+      left: 16px;
       z-index: 99;
       background-color: var(--accent-color);
       color: #ffffff;
       border: none;
       border-radius: 50px;
-      padding: 12px 22px;
-      font-size: 0.95rem;
+      padding: 8px 14px; /* Reduced padding for smaller size */
+      font-size: 0.8rem;  /* Smaller font size */
       font-weight: 600;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       transition: all 0.2s ease-in-out;
+      opacity: 0.9;
     }
 
     #returnFab:hover, #returnFab:active {
       transform: scale(1.05);
       background-color: var(--accent-hover);
+      opacity: 1;
     }
 
     #returnFab svg {
-      width: 20px;
-      height: 20px;
+      width: 14px;
+      height: 14px;
       fill: none;
       stroke: currentColor;
       stroke-width: 2.5;
@@ -254,17 +256,6 @@
           </div>
         </div>
 
-        <!-- Admin Control Card -->
-        <div class="app-card" onclick="launchApp('admin')">
-          <div class="app-icon">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          </div>
-          <div class="app-info">
-            <h3>Admin Control</h3>
-            <p>Settings & administration</p>
-          </div>
-        </div>
-
       </div>
     </div>
 
@@ -273,10 +264,10 @@
       <iframe id="appFrame" src="" title="App Content"></iframe>
     </div>
 
-    <!-- Super Floating Return Button -->
+    <!-- Small Floating Return Button (Bottom Left) -->
     <button id="returnFab" onclick="closeApp()">
       <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      <span>Hub Page</span>
+      <span>Hub</span>
     </button>
 
   </div>
@@ -285,12 +276,11 @@
     // ==========================================
     // CONFIGURATION
     // ==========================================
-    const SECRET_KEY = "NGA2026"; // Change if you want a different secret key
+    const SECRET_KEY = "NGA2026"; 
 
     const APPS = {
       scoreboard: "https://script.google.com/macros/s/AKfycbw_JhNBQMJNJLtFdSk0d26IHkKQmz3sZdIANeiGrpmORQrPPUxKup1pg1gz3DBJ5t6f/exec",
-      booking: "https://script.google.com/macros/s/AKfycbwAiFXnLCjdD8VDdQKzQpxU1hxqK4s7FavyC_f9LRSMmV3Q7g3DLIp7MDJZDBnrh6wD/exec",
-      admin: "https://script.google.com/macros/s/AKfycbz5uayzvcPfXG3rLzDLTdez4BN0ByYzlCVKUe2aH7r4PJKN4Woq2OH2dfld_PK7AV1mNA/exec"
+      booking: "https://script.google.com/macros/s/AKfycbwAiFXnLCjdD8VDdQKzQpxU1hxqK4s7FavyC_f9LRSMmV3Q7g3DLIp7MDJZDBnrh6wD/exec"
     };
 
     // Check URL parameters on page load
@@ -308,7 +298,6 @@
     function launchApp(appName) {
       const frame = document.getElementById('appFrame');
       
-      // Load iframe source only if different
       if (frame.src !== APPS[appName]) {
         frame.src = APPS[appName];
       }

@@ -7,26 +7,26 @@
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <title>NGA App Hub</title>
 
-  <!-- HOME SCREEN CUSTOM ICONS (iOS & Basic Android) -->
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="apple-touch-icon.png">
+  <!-- HOME SCREEN CUSTOM ICONS (iOS & Android) -->
+  <link rel="apple-touch-icon" href="logo-v2.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="logo-v2.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="logo-v2.png">
 
-  <!-- ANDROID WEB APP MANIFEST & THEME -->
+  <!-- ANDROID WEB APP MANIFEST & LIGHT THEME -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#f8fafc">
   
   <style>
-    /* ==================== GLOBAL STYLES & RESET ==================== */
+    /* ==================== LIGHT THEME STYLES & RESET ==================== */
     :root {
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --card-hover: #334155;
-      --accent-color: #2563eb;
-      --accent-hover: #1d4ed8;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: #334155;
+      --bg-color: #f8fafc;        /* Off-white background */
+      --card-bg: #ffffff;        /* Pure white cards */
+      --card-hover: #f1f5f9;      /* Light grey on hover */
+      --accent-color: #2563eb;    /* Primary blue */
+      --accent-hover: #1d4ed8;    /* Darker blue hover */
+      --text-main: #0f172a;       /* Dark navy text for high contrast */
+      --text-muted: #64748b;      /* Medium grey muted text */
+      --border-color: #e2e8f0;    /* Light grey border */
     }
 
     * {
@@ -39,7 +39,7 @@
     html, body {
       width: 100vw;
       height: 100vh;
-      overflow: hidden; /* Prevents any unwanted horizontal/vertical scrolling */
+      overflow: hidden; /* Prevents unwanted scrolling */
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-main);
@@ -79,13 +79,16 @@
       margin: 0 auto;
     }
 
+    /* CENTER-ALIGNED HEADER */
     .header-section {
       margin-bottom: 32px;
+      text-align: center;
     }
     .header-section h1 {
       font-size: 1.85rem;
       font-weight: 700;
       letter-spacing: -0.02em;
+      color: var(--text-main);
     }
     .header-section p {
       color: var(--text-muted);
@@ -111,21 +114,22 @@
       gap: 16px;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .app-card:hover, .app-card:active {
       background: var(--card-hover);
       transform: translateY(-2px);
       border-color: var(--accent-color);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
     }
 
     .app-icon {
       width: 52px;
       height: 52px;
       border-radius: 14px;
-      background: rgba(37, 99, 235, 0.15);
-      color: #60a5fa;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--accent-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -144,13 +148,14 @@
 
     .app-info {
       flex: 1;
-      min-width: 0; /* Prevents text overflow */
+      min-width: 0;
     }
 
     .app-info h3 {
       font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 4px;
+      color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -197,13 +202,13 @@
       padding: 8px 14px;
       font-size: 0.8rem;
       font-weight: 600;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
       transition: all 0.2s ease-in-out;
-      opacity: 0.9;
+      opacity: 0.95;
     }
 
     #returnFab:hover, #returnFab:active {

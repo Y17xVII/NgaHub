@@ -254,6 +254,48 @@
       width: 100%; 
       height: 100%; 
       border: none; 
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    iframe.loaded {
+      opacity: 1;
+    }
+
+    /* SPINNER ADDITION */
+    #appSpinnerOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 20;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3.5px solid var(--border-color);
+      border-top-color: var(--accent-color);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .spinner-text {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* FLOATING BUTTON BAR (Compact Bottom-Left) */
@@ -347,6 +389,12 @@
 
     <!-- EMBEDDED WEB APP IFRAME -->
     <div id="appContainer">
+      <!-- SPINNER OVERLAY ADDITION -->
+      <div id="appSpinnerOverlay">
+        <div class="spinner"></div>
+        <div class="spinner-text">Opening app...</div>
+      </div>
+
       <iframe id="appFrame" src="" title="App Content"></iframe>
     </div>
 
@@ -378,6 +426,15 @@
       if (savedUser) {
         showDashboard(JSON.parse(savedUser));
       }
+
+      // Hide spinner and show iframe when loaded
+      const frame = document.getElementById('appFrame');
+      frame.addEventListener('load', function() {
+        if (frame.src && !frame.src.includes('about:blank')) {
+          frame.classList.add('loaded');
+          document.getElementById('appSpinnerOverlay').style.display = 'none';
+        }
+      });
     };
 
     async function handleLogin() {
@@ -442,12 +499,22 @@
 
       const user = JSON.parse(savedUser);
 
+      // Reset spinner and iframe opacity state
+      frame.classList.remove('loaded');
+      document.getElementById('appSpinnerOverlay').style.display = 'flex';
+
       // Pass user credentials as URL query parameters
       const queryParams = `?username=${encodeURIComponent(user.username)}&unit=${encodeURIComponent(user.unit)}&name=${encodeURIComponent(user.name)}`;
       const targetUrl = APPS[appName] + queryParams;
 
+      // 1. Instantly clear old content if opening a different app
       if (frame.src !== targetUrl) {
-        frame.src = targetUrl;
+        frame.src = 'about:blank'; // Clears the previous app's screen immediately
+        
+        // Tiny 50ms pause lets the browser render the blank state before starting the new load
+        setTimeout(() => {
+          frame.src = targetUrl;
+        }, 50);
       }
 
       document.getElementById('appContainer').style.display = 'block';
@@ -455,8 +522,17 @@
     }
 
     function closeApp() {
+      const frame = document.getElementById('appFrame');
+
       document.getElementById('appContainer').style.display = 'none';
       document.getElementById('floatingBar').style.display = 'none';
+      
+      // Reset iframe state for the next launch
+      frame.classList.remove('loaded');
+      document.getElementById('appSpinnerOverlay').style.display = 'flex';
+
+      // 2. Wipe iframe source when returning to Hub so nothing lingers in memory
+      frame.src = 'about:blank';
     }
   </script>
 </body>

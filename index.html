@@ -49,25 +49,6 @@
       color: var(--text-main);
     }
 
-    /* LOGO STYLING */
-    .brand-logo {
-      max-width: 120px;
-      height: auto;
-      margin-bottom: 16px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      object-fit: contain;
-    }
-
-    .dashboard-logo {
-      max-width: 140px;
-      height: auto;
-      margin-bottom: 12px;
-      display: inline-block;
-      object-fit: contain;
-    }
-
     /* LOGIN VIEW */
     #loginScreen {
       display: flex;
@@ -307,8 +288,6 @@
   <!-- LOGIN SCREEN -->
   <div id="loginScreen">
     <div class="login-card">
-      <img src="logo-v2.png" alt="NGA Logo" class="brand-logo" onerror="this.style.display='none'">
-
       <h2>NGA App Hub</h2>
       <p>Enter your details to sign in</p>
 
@@ -331,7 +310,6 @@
   <div id="workspace">
     <div id="dashboardView">
       <div class="header-section">
-        <img src="logo-v2.png" alt="NGA Logo" class="dashboard-logo" onerror="this.style.display='none'">
         <h1>NGA App Hub</h1>
         <p id="welcomeMsg">Select an application to launch</p>
       </div>
@@ -421,7 +399,6 @@
         const result = await response.json();
 
         if (result.status === "success") {
-          sessionStorage.getItem("nga_agent")
           sessionStorage.setItem("nga_agent", JSON.stringify(result.user));
           showDashboard(result.user);
         } else {

@@ -256,30 +256,36 @@
       border: none; 
     }
 
-    /* FLOATING BUTTON BAR */
+    /* FLOATING BUTTON BAR (Compact Bottom-Left) */
     #floatingBar { 
       display: none; 
       position: fixed; 
-      bottom: 20px; 
-      left: 20px; 
+      bottom: 16px; 
+      left: 16px; 
       z-index: 99; 
-      background: var(--text-main); 
-      border-radius: 50px; 
-      padding: 6px 12px; 
-      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      background: rgba(15, 23, 42, 0.9); 
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 20px; 
+      padding: 2px; 
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
     }
 
     .fab-btn { 
       background: transparent; 
-      color: #fff; 
+      color: #ffffff; 
       border: none; 
       padding: 6px 12px; 
       font-weight: 600; 
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       cursor: pointer; 
       display: flex; 
       align-items: center; 
-      gap: 6px; 
+      gap: 5px; 
+    }
+    
+    .fab-btn:active {
+      transform: scale(0.95);
     }
   </style>
 </head>
@@ -347,13 +353,17 @@
     <!-- FLOATING RETURN BUTTON -->
     <div id="floatingBar">
       <button class="fab-btn" onclick="closeApp()">
-        <span>← Back to Hub</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 14 4 9 9 4"></polyline>
+          <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+        </svg>
+        <span>Hub</span>
       </button>
     </div>
   </div>
 
   <script>
-    // Replace with your deploy script URL that handles authentication
+    // Authentication Web App URL
     const API_URL = "https://script.google.com/macros/s/AKfycbwG86bEja8szmYohaCZbhOMy2TKjG0IiTNYGvaLzaLHGAhDTu_LmhDl2UeQoiBA8ecs6g/exec"; 
 
     // URLs for embedded Web Apps
@@ -432,7 +442,7 @@
 
       const user = JSON.parse(savedUser);
 
-      // Append credentials into URL parameters for auto-authentication
+      // Pass user credentials as URL query parameters
       const queryParams = `?username=${encodeURIComponent(user.username)}&unit=${encodeURIComponent(user.unit)}&name=${encodeURIComponent(user.name)}`;
       const targetUrl = APPS[appName] + queryParams;
 

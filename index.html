@@ -384,6 +384,23 @@
             <p>Schedules & reservations</p>
           </div>
         </div>
+
+        <!-- HOSPITAL LEADS CARD -->
+        <div class="app-card" onclick="launchApp('leads')">
+          <div class="app-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+              <path d="M9 12h6"></path>
+              <path d="M9 16h6"></path>
+              <path d="M12 9v6"></path>
+            </svg>
+          </div>
+          <div class="app-info">
+            <h3>Hospital Leads Update</h3>
+            <p>Manage client leads & policies</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -417,7 +434,8 @@
     // URLs for embedded Web Apps
     const APPS = {
       scoreboard: "https://script.google.com/macros/s/AKfycbw_JhNBQMJNJLtFdSk0d26IHkKQmz3sZdIANeiGrpmORQrPPUxKup1pg1gz3DBJ5t6f/exec",
-      booking: "https://script.google.com/macros/s/AKfycbwAiFXnLCjdD8VDdQKzQpxU1hxqK4s7FavyC_f9LRSMmV3Q7g3DLIp7MDJZDBnrh6wD/exec"
+      booking: "https://script.google.com/macros/s/AKfycbwAiFXnLCjdD8VDdQKzQpxU1hxqK4s7FavyC_f9LRSMmV3Q7g3DLIp7MDJZDBnrh6wD/exec",
+      leads: "https://script.google.com/macros/s/AKfycbxL4_JZRxCxfGdZLkvG0WoEKl2uh_JDEGBlWStNvBcPFLKHXLCecNsgtwE7lFzvSt0Orw/exec"
     };
 
     // Auto-login on page load if session exists

@@ -401,6 +401,23 @@
             <p>Manage client leads & policies</p>
           </div>
         </div>
+
+        <!-- LEAVE BALANCE & RECORD CARD -->
+        <div class="app-card" onclick="launchApp('leave')">
+          <div class="app-icon">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+              <path d="M9 16l2 2 4-4"></path>
+            </svg>
+          </div>
+          <div class="app-info">
+            <h3>Leave Balance & Record</h3>
+            <p>Check balances & submit requests</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -435,7 +452,8 @@
     const APPS = {
       scoreboard: "https://script.google.com/macros/s/AKfycbw_JhNBQMJNJLtFdSk0d26IHkKQmz3sZdIANeiGrpmORQrPPUxKup1pg1gz3DBJ5t6f/exec",
       booking: "https://script.google.com/macros/s/AKfycbwAiFXnLCjdD8VDdQKzQpxU1hxqK4s7FavyC_f9LRSMmV3Q7g3DLIp7MDJZDBnrh6wD/exec",
-      leads: "https://script.google.com/macros/s/AKfycbwb0E6iN8A-X65tmAsd3Pqmc1YcEMhT4vE_GRQ3NLfnfA68L7I5xpnX1K2SESHL5K4f/exec"
+      leads: "https://script.google.com/macros/s/AKfycbwb0E6iN8A-X65tmAsd3Pqmc1YcEMhT4vE_GRQ3NLfnfA68L7I5xpnX1K2SESHL5K4f/exec",
+      leave: "https://script.google.com/macros/s/AKfycbxFZvqqsX1QvcwaKKRWNT8_RJ_XYHqePRcFNFxAXmDVy1xba4KxXK7ocgqiIvMAg9djaA/exec"
     };
 
     // Auto-login on page load if session exists
